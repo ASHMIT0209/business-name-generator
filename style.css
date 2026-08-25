@@ -158,6 +158,9 @@ button {
 
 button:hover { background: var(--accent-dark); transform: translateY(-2px); }
 button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.result-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.secondary-button { min-height: 44px; color: var(--ink); background: rgba(255, 255, 255, 0.55); font-size: 0.72rem; }
+.secondary-button:hover { color: #fff; background: var(--ink); }
 .result-label { margin: 0; font: 700 0.76rem Arial, sans-serif; letter-spacing: 0.12em; text-transform: uppercase; }
 
 #business-name {
@@ -173,8 +176,24 @@ button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 
 .result-note { margin: 0 0 24px; color: #4e6459; font: 0.9rem/1.5 Arial, sans-serif; }
 
+.saved-section { margin-top: 34px; padding: 28px 0 0; border-top: 1px solid var(--line); }
+.saved-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+.saved-heading .eyebrow { margin-bottom: 8px; }
+.saved-heading h2 { margin: 0; font-size: 2rem; font-weight: 500; }
+.text-button { width: auto; min-height: auto; padding: 5px 0; color: var(--accent-dark); background: transparent; font-size: 0.72rem; }
+.text-button:hover { color: var(--ink); background: transparent; transform: none; }
+#saved-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0; margin: 22px 0 0; list-style: none; }
+#saved-list li { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-width: 0; padding: 17px; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; }
+#saved-list strong, #saved-list span { display: block; overflow-wrap: anywhere; }
+#saved-list strong { margin-bottom: 5px; font-size: 1.08rem; font-weight: 500; }
+#saved-list span { color: var(--muted); font: 0.72rem/1.35 Arial, sans-serif; }
+#saved-list button { width: auto; min-height: auto; padding: 4px; color: var(--muted); background: transparent; font-size: 0.66rem; }
+#saved-list button:hover { color: var(--accent-dark); background: transparent; transform: none; }
+
 @media (max-width: 720px) {
     .page { width: min(100% - 28px, 540px); padding-top: 54px; }
     .workspace { grid-template-columns: 1fr; }
     #business-name { min-height: 110px; }
+    .result-actions, #saved-list { grid-template-columns: 1fr; }
+    .saved-heading { align-items: start; }
 }

@@ -67,8 +67,22 @@
                         </div>
                     </div>
                 </div>
-                <button id="again-button" type="button" hidden>Try another</button>
+                <div class="result-actions">
+                    <button id="copy-button" class="secondary-button" type="button" hidden>Copy name</button>
+                    <button id="save-button" class="secondary-button" type="button" hidden>Save idea</button>
+                    <button id="again-button" class="secondary-button" type="button" hidden>Try another</button>
+                </div>
             </section>
+        </section>
+        <section class="saved-section" aria-labelledby="saved-title" hidden>
+            <div class="saved-heading">
+                <div>
+                    <p class="eyebrow">Your shortlist</p>
+                    <h2 id="saved-title">Ideas worth keeping</h2>
+                </div>
+                <button id="clear-button" class="text-button" type="button">Clear all</button>
+            </div>
+            <ul id="saved-list"></ul>
         </section>
     </main>
     <script src="script.js"></script>

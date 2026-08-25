@@ -19,6 +19,13 @@ const logoName = document.getElementById("logo-name");
 const logoDescription = document.getElementById("logo-description");
 const form = document.getElementById("name-form");
 const againButton = document.getElementById("again-button");
+const copyButton = document.getElementById("copy-button");
+const saveButton = document.getElementById("save-button");
+const savedSection = document.querySelector(".saved-section");
+const savedList = document.getElementById("saved-list");
+const clearButton = document.getElementById("clear-button");
+const savedIdeas = JSON.parse(localStorage.getItem("foundryIdeas") || "[]");
+let currentIdea = null;
 
 function randomItem(items) {
     return items[Math.floor(Math.random() * items.length)];
@@ -48,8 +55,13 @@ function generateName() {
     const style = document.getElementById("style").value;
     const location = document.getElementById("location").value.trim();
     const place = location ? `${location} ` : "";
-    const generatedName = `${place}${randomItem(firstWords[style])} ${randomItem(secondWords[audience])}`;
+    let generatedName = `${place}${randomItem(firstWords[style])} ${randomItem(secondWords[audience])}`;
+    const previousName = currentIdea ? currentIdea.name : "";
+    while (generatedName === previousName) {
+        generatedName = `${place}${randomItem(firstWords[style])} ${randomItem(secondWords[audience])}`;
+    }
     const logo = chooseLogoSymbol(businessType);
+    currentIdea = { name: generatedName, businessType, style, logoLabel: logo.label };
 
     nameElement.textContent = generatedName;
     resultNote.textContent = `A ${style} name for ${businessType}. Generate again to explore another direction.`;
@@ -58,7 +70,46 @@ function generateName() {
     logoName.textContent = `${generatedName} mark`;
     logoDescription.textContent = `${style[0].toUpperCase()}${style.slice(1)} ${logo.label} identity for ${businessType}.`;
     againButton.hidden = false;
+    copyButton.hidden = false;
+    saveButton.hidden = savedIdeas.some((idea) => idea.name === generatedName);
 }
+
+function renderSavedIdeas() {
+    savedList.replaceChildren();
+    savedSection.hidden = savedIdeas.length === 0;
+    savedIdeas.forEach((idea) => {
+        const item = document.createElement("li");
+        item.innerHTML = `<div><strong></strong><span></span></div><button type="button" aria-label="Remove saved idea">Remove</button>`;
+        item.querySelector("strong").textContent = idea.name;
+        item.querySelector("span").textContent = `${idea.style} ${idea.logoLabel} identity for ${idea.businessType}`;
+        item.querySelector("button").addEventListener("click", () => {
+            savedIdeas.splice(savedIdeas.indexOf(idea), 1);
+            localStorage.setItem("foundryIdeas", JSON.stringify(savedIdeas));
+            renderSavedIdeas();
+            if (currentIdea && currentIdea.name === idea.name) saveButton.hidden = false;
+        });
+        savedList.append(item);
+    });
+}
+
+copyButton.addEventListener("click", async () => {
+    await navigator.clipboard.writeText(currentIdea.name);
+    copyButton.textContent = "Copied";
+    setTimeout(() => { copyButton.textContent = "Copy name"; }, 1400);
+});
+
+saveButton.addEventListener("click", () => {
+    savedIdeas.unshift(currentIdea);
+    localStorage.setItem("foundryIdeas", JSON.stringify(savedIdeas.slice(0, 12)));
+    saveButton.hidden = true;
+    renderSavedIdeas();
+});
+
+clearButton.addEventListener("click", () => {
+    savedIdeas.length = 0;
+    localStorage.removeItem("foundryIdeas");
+    renderSavedIdeas();
+});
 
 form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -70,3 +121,4 @@ form.addEventListener("submit", (event) => {
 });
 
 againButton.addEventListener("click", generateName);
+renderSavedIdeas();
